@@ -16,3 +16,6 @@ def shop(request):
 
 def contact(request):
     return render(request, 'contact.html')
+
+def chatbot(request):
+    return render(request, 'chatbot.html')

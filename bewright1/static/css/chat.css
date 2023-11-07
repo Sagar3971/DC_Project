@@ -3,13 +3,6 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f0f0f0;
-    display: flex;
-    justify-content: flex-end;
-    /* Align the chatbot to the right */
-    align-items: flex-end;
-    /* Align the chatbot to the bottom */
-    min-height: 100vh;
-    /* Ensure chatbot covers the entire viewport height */
 }
 
 .chat-container {
@@ -59,4 +52,10 @@ body {
     padding: 5px 10px;
     margin-left: 10px;
     cursor: pointer;
+}
+/* Position the chatbot at the right bottom corner */
+.chat-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
 }
