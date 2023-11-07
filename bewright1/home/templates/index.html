@@ -16,6 +16,7 @@
 <!-- bootstrap css -->
 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css'%}">
 <!-- style css -->
+
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css'%}">
 <!-- Responsive-->
 <link rel="stylesheet" href="{% static 'css/responsive.css'%}">
@@ -29,26 +30,27 @@
 <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css'%}">
 <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css'%}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+<!--  <link rel="stylesheet" type="text/css" href="{% static 'css/chat.css'%}">-->
 </head>
 <body>
   <!--header section start -->
   <div class="header_section">
     <div class="container-fluid">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="logo"><a href="#"><img src="{% static 'images/logo.png'%}"></a></div>
+        <div class="logo"><a href="index"><img src="{% static 'images/logo1.png'%}"></a></div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" href="">HOME</a>
+              <a class="nav-link" href="index">HOME</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="shop">SHOP</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="vegetables">VEGETABLES</a>
+              <a class="nav-link" href="vegetables">Items</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="about">ABOUT</a>
@@ -66,6 +68,7 @@
   </div>
   <!--header section end -->
   <!--banner section start -->
+
   <div class="banner_section layout_padding">
     <div class="container">
       <div id="main_slider" class="carousel slide" data-ride="carousel">
@@ -76,7 +79,7 @@
                 <div class="image_1"><img src="{% static 'images/img-1.png'%}"></div>
               </div>
               <div class="col-md-6">
-                <h1 class="banner_taital">Vegetables <span style="color: #ecad15;">Shop</span></h1>
+                <h1 class="banner_taital">Daily <span style="color: #ecad15;">Shop</span></h1>
                 <p class="banner_text">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem</p>
                 <div class="buy_bt"><a href="#">Buy Now</a></div>
                 <div class="read_bt"><a href="#">Read More</a></div>
@@ -258,6 +261,7 @@
     </div>
   </div>
   <!--choose section end -->
+
   <!--testimonial section start -->
   <div class="testimonial_section layout_padding">
     <div class="container">
@@ -340,7 +344,7 @@
           <div class="col-md-6">
             <div class="map_main">
               <div class="map-responsive">
-                <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&q=Eiffel+Tower+Paris+France" width="600" height="480" frameborder="0" style="border:0; width: 100%;" allowfullscreen></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3066.2092914190503!2d-84.06768272504094!3d39.77985829415699!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88409cf05f334387%3A0x4a08e9031987088!2sWright%20State%20University!5e0!3m2!1sen!2sus!4v1699327191086!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
               </div>
             </div>
           </div>
@@ -379,6 +383,8 @@
     <p class="copyright_text">Copyright 2023 All Right Reserved <a href="#">Be Wright Grocery</a></p>
   </div>
   <!--copyright section end -->
+
+
   <!-- Javascript files-->
   <script src="js/jquery.min.js"></script>
   <script src="js/popper.min.js"></script>
@@ -391,5 +397,6 @@
   <!-- javascript --> 
   <script src="js/owl.carousel.js"></script>
   <script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
 </body>
 </html>
