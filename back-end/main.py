@@ -1,9 +1,72 @@
-from fastapi import FastAPI,Request
+from fastapi import FastAPI,Request,Depends, status
 from fastapi.responses import JSONResponse
 import re
-
+from pydantic import BaseModel
+import db_models
+from db_connect import db_engine, session_local
+from sqlalchemy.orm import Session
+from sqlalchemy.orm import sessionmaker
+from typing import Annotated
 
 app = FastAPI()
+db_models.declarative_base.metadata.create_all(bind=db_engine)
+
+
+class ItemBaseModel(BaseModel):
+    name: str
+    company: str
+    price: float
+
+
+class OrderBaseModel(BaseModel):
+    id: int
+    items: str
+    total_price: float
+    status: str
+
+
+def connect_to_db():
+    db_connection = session_local()
+    try:
+        yield db_connection
+    finally:
+        db_connection.close()
+
+
+# https://youtu.be/zzOwU41UjTM?t=1040
+
+db_dependancy = Annotated[Session, Depends(connect_to_db)]
+
+
+def get_db_session(engine):
+    try:
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        return session
+    except Exception as ex:
+        print("Error getting DB session : ", ex)
+        return None
+
+
+@app.post("/order/", status_code=status.HTTP_201_CREATED)
+async def create_order(order: OrderBaseModel, db: db_dependancy):
+    db_user = db_models.Order(**order.model_dump())
+    db.add(db_user)
+    db.commit()
+
+
+@app.get("/order/{id}", status_code=status.HTTP_201_CREATED)
+async def create_order(order: OrderBaseModel, db: db_dependancy):
+    db_user = db_models.Order(**order.model_dump())
+    db.add(db_user)
+    db.commit()
+
+
+@app.post("/item/", status_code=status.HTTP_201_CREATED)
+async def create_item(item: ItemBaseModel, db: db_dependancy):
+    db_user = db_models.Item(**item.model_dump())
+    db.add(db_user)
+    db.commit()
 
 @app.post("/")
 async def df_request_handler(request: Request):
