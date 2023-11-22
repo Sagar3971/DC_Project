@@ -1,11 +1,10 @@
-from fastapi import FastAPI,Request,Depends, status
+from fastapi import FastAPI, Request, Depends, status
 from fastapi.responses import JSONResponse
-import re
 from pydantic import BaseModel
 import db_models
 from db_connect import db_engine, session_local
 from sqlalchemy.orm import Session
-from sqlalchemy.orm import sessionmaker
+from chatbot import get_session_id_from_context, process_intent
 from typing import Annotated
 
 app = FastAPI()
@@ -38,16 +37,6 @@ def connect_to_db():
 db_dependancy = Annotated[Session, Depends(connect_to_db)]
 
 
-def get_db_session(engine):
-    try:
-        Session = sessionmaker(bind=engine)
-        session = Session()
-        return session
-    except Exception as ex:
-        print("Error getting DB session : ", ex)
-        return None
-
-
 @app.post("/order/", status_code=status.HTTP_201_CREATED)
 async def create_order(order: OrderBaseModel, db: db_dependancy):
     db_user = db_models.Order(**order.model_dump())
@@ -68,6 +57,7 @@ async def create_item(item: ItemBaseModel, db: db_dependancy):
     db.add(db_user)
     db.commit()
 
+
 @app.post("/")
 async def df_request_handler(request: Request):
     print("RECEIVED")
@@ -83,30 +73,3 @@ async def df_request_handler(request: Request):
         session_id=df_session_id)
     })
 
-
-def process_intent(intent, response_parameters, session_id: str):
-    match intent:
-        case 'track.order':
-            return #####
-        case 'add.items':
-            return #####
-        case 'order.brand':
-            return #####
-        case 'view.cart':
-            return #####
-        case 'place.the.order':
-            return #####
-        case 'remove.from.cart':
-            return #####
-        case default:
-            return ('I couldn\'t understand you. Please say "New Order" for placing a new order or "track order" to '
-                    'track an order. also, only items available to add in your orders are "Milk", "Bread", "eggs", '
-                    '"Sugar", "Salt", "Oil", "tomato Ketchup", "water" and "noodles". for example, you can say "add '
-                    'two eggs".')
-
-
-def get_session_id_from_context(context: str):
-    extracted_session_id = re.search(r"/sessions/(.*?)/contexts/", context)
-    if extracted_session_id:
-        return extracted_session_id.group(1)
-    return ""
