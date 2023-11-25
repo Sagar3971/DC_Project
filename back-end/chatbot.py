@@ -1,5 +1,6 @@
 import re
 from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.exc import NoResultFound
 import db_models
 from db_connect import db_engine
 
@@ -43,6 +44,27 @@ def get_session_id_from_context(context: str):
     if extracted_session_id:
         return extracted_session_id.group(1)
     return ""
+
+def track_order(order_parameters: dict):
+    order_id = order_parameters['order_id']
+    order_status = ""
+    order_price = 0
+    try:
+        db_session = get_db_session(engine=db_engine)
+        order_status = db_session.query(db_models.Order.status).filter(db_models.Order.id == int(order_id)).first()
+        order_price = db_session.query(db_models.Order.total_price).filter(db_models.Order.id == int(order_id)).first()
+        db_session.close()
+    except NoResultFound:
+        print("NO DATA FOUND")
+
+    if order_status:
+        response_text = (f"Thank you for ordering from shopper. Your order with order id: {int(order_id)} of "
+                         f"total price: {order_price[0]}$ is in {order_status[0]} status")
+    else:
+        response_text = (f"Dear customer,We regret to inform you that no order was found with Order id {int(order_id)} "
+                         f"please say new order to a place an order")
+
+    return response_text
 
 
 def add_order(order_parameters: dict, session_id: str):
