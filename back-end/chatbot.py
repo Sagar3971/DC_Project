@@ -21,17 +21,17 @@ in_progress_carts = {}
 def process_intent(intent, response_parameters, session_id: str):
     match intent:
         case 'track.order':
-            return ###
+            return track_order(response_parameters)
         case 'add.items':
             return add_order(response_parameters, session_id)
         case 'order.brand':
             return get_available_brands(response_parameters, session_id)
         case 'view.cart':
-            return ###
+            return get_session_cart_items(session_id)
         case 'place.the.order':
-            return ###
+            return  ###
         case 'remove.from.cart':
-            return ###
+            return remove_order(response_parameters, session_id)
         case default:
             return ('I couldn\'t understand you. Please say "New Order" for placing a new order or "track order" to '
                     'track an order. also, only items available to add in your orders are "Milk", "Bread", "eggs", '
@@ -44,6 +44,7 @@ def get_session_id_from_context(context: str):
     if extracted_session_id:
         return extracted_session_id.group(1)
     return ""
+
 
 def track_order(order_parameters: dict):
     order_id = order_parameters['order_id']
@@ -97,9 +98,7 @@ def add_order(order_parameters: dict, session_id: str):
 def get_available_brands(order_parameters: dict, session_id: str):
     grocery_items = order_parameters['grocery-item']
     grocery_brands = order_parameters['brand']
-
-    if len(grocery_items) != len(grocery_brands):
-        return f"Sorry, Please specify brands for all your grocery items at ones"
+    existing_items = in_progress_carts[session_id]
 
     for item in grocery_items:
         cart_item = in_progress_carts[session_id]
@@ -107,7 +106,7 @@ def get_available_brands(order_parameters: dict, session_id: str):
             index = grocery_items.index(item)
             cart_item[item]['brand'] = grocery_brands[index]
             brand_name = cart_item[item]['brand'] if cart_item[item]['brand'] != "great\xa0value" else "great value"
-            cart_item[item]['price'] = get_item_prices(item_name=item, item_brand=brand_name)[0]
+            cart_item[item]['price'] = round(get_item_prices(item_name=item, item_brand=brand_name)[0], 2)
             in_progress_carts[session_id] = cart_item
 
     cart_item_info_str = convert_cart_items_to_str(in_progress_carts[session_id])
@@ -115,22 +114,22 @@ def get_available_brands(order_parameters: dict, session_id: str):
 
     unbranded_items = []
 
-    for key in in_progress_carts[session_id]:
+    for key in existing_items.keys():
         if "brand" not in in_progress_carts[session_id][key].keys():
             unbranded_items.append(key)
 
     if len(unbranded_items) > 0:
-        response_text += f"You need to specify brands for {unbranded_items}"
+        response_text += f"You need to specify brands for {",".join(unbranded_items)}"
     else:
         response_text += "Do you need anything else?"
     return response_text
 
 
 def convert_cart_items_to_str(grocery_cart: dict):
-    cart_items_str = ", ".join([f"{int(value['quantity'])} {value['brand']} {key} " +
-                                str('for $' + str(value['price'] * int(value['quantity'])) if value['price'] else '') +
-                                f"" for key, value in grocery_cart
-                               .items()])
+    cart_items_str = ", ".join(
+        [str(str(int(value['quantity'])) + " " + value['brand'] + " " + key + " " if 'brand' in value.keys() else ' ') +
+         str('for $' + str(value['price'] * int(value['quantity'])) if 'price' in value.keys() else '') +
+         f"" for key, value in grocery_cart.items()])
     return cart_items_str
 
 
@@ -178,3 +177,37 @@ def get_total_cart_value(session_id: str):
     return total_price
 
 
+def get_session_cart_items(session_id):
+    cart_item_info_str = convert_cart_items_to_str(in_progress_carts[session_id])
+    return (f"In your cart, you have {cart_item_info_str}. And your total to pay is {get_total_cart_value(session_id)}."
+            f" Do you need anything else?")
+
+
+def remove_order(order_parameters: dict, session_id: str):
+    response_text = ""
+
+    if session_id not in in_progress_carts:
+        return "Sorry, Couldn't find your order. Please place a new order by saying \"NEW ORDER\"."
+    grocery_items = order_parameters['grocery-item']
+    present_cart = in_progress_carts[session_id]
+
+    removed_grocery_items = []
+    unknown_grocery_items = []
+
+    for grocery_item in grocery_items:
+        if grocery_item in present_cart:
+            removed_grocery_items.append(grocery_item)
+            present_cart.pop(grocery_item)
+        else:
+            unknown_grocery_items.append(grocery_item)
+
+    response_text += f"Items {','.join(removed_grocery_items)} are now removed from your cart." \
+        if any(removed_grocery_items) else ""
+    response_text += f" Sorry You don\'t have following items in your cart: {','.join(unknown_grocery_items)}" \
+        if any(unknown_grocery_items) else ""
+    response_text += " Your cart is empty." \
+        if not any(present_cart.keys()) \
+        else (f" You have following items in your cart:{convert_cart_items_to_str(present_cart)}.Do you need anything "
+              f"else?")
+
+    return response_text
