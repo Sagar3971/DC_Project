@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function() {
     const chatMessages = document.getElementById("chat-messages");
     const userInput = document.getElementById("user-input");

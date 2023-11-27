@@ -9,4 +9,5 @@ urlpatterns = [
     path('contact', views.contact),
     path('shop', views.shop),
     path('chatbot', views.chatbot),
+    path('get_bot_response/', views.get_bot_response_view, name='get_bot_response'),
 ]

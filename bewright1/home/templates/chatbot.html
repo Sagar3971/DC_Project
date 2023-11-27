@@ -71,20 +71,43 @@
       </nav>
     </div>
   </div>
-<div class="chat-container">
-    <div class="chat-header">
-        Shopper
-    </div>
-    <div class="chat-messages" id="chat-messages">
-        <!-- Chat messages will be added here dynamically using JavaScript -->
-    </div>
-    <div class="chat-input">
-        <input type="text" id="user-input" placeholder="Type your message...">
-        <img src="{% static 'images/mic.png'%}">
-        <button id="send-button">Send</button>
-    </div>
+<!--    <div class="chat-header">-->
+<!--        Shopper-->
+<!--    </div>-->
+<div id="chat-container">
+    <div id="chat-box"></div>
+    <input type="text" id="user-input" placeholder="Type your message...">
+    <img src="{% static 'images/mic.png'%}">
+    <button onclick="sendMessage()">Send</button>
 </div>
-<script src="{% static 'js/chat.js'%}"></script>
+<!--<script src="{% static 'js/chat.js'%}"></script>-->
+
+
+<script>
+        function sendMessage() {
+            var userInput = document.getElementById('user-input').value;
+            appendMessage('You: ' + userInput);
+
+            // Make an AJAX request to get the bot response
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/get_bot_response/?user_input=' + userInput, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var botResponse = JSON.parse(xhr.responseText).bot_response;
+                    appendMessage('Shopper: ' + botResponse);
+                }
+            };
+            xhr.send();
+        }
+
+        function appendMessage(message) {
+            var chatBox = document.getElementById('chat-box');
+            var newMessage = document.createElement('div');
+            newMessage.innerHTML = message;
+            chatBox.appendChild(newMessage);
+            document.getElementById('user-input').value = '';
+        }
+</script>
 </body>
 
 </html>
