@@ -29,7 +29,7 @@ def process_intent(intent, response_parameters, session_id: str):
         case 'view.cart':
             return get_session_cart_items(session_id)
         case 'place.the.order':
-            return  ###
+            return complete_order(session_id)
         case 'remove.from.cart':
             return remove_order(response_parameters, session_id)
         case default:
@@ -211,3 +211,42 @@ def remove_order(order_parameters: dict, session_id: str):
               f"else?")
 
     return response_text
+
+def complete_order(session_id: str):
+    if session_id in in_progress_carts:
+        order_id, total_price = save_order(session_id=session_id)
+        print(order_id)
+        if order_id == -1:
+            return "Sorry, I was not able to place order at the moment. Please place a new one after some-time."
+        else:
+            response_text = (
+                f"Your order is placed successfully.The total price of your order is {total_price}$ and your new order id is {order_id}"
+                f". Please use your order id to track your delivery. Thank you.")
+        del in_progress_carts[session_id]
+    else:
+        return "Sorry, Couldn't find your order. Please place a new order by saying \"NEW ORDER\"."
+
+    return response_text
+
+
+def save_order(session_id: str):
+    total_price = get_total_cart_value(session_id)
+    current_cart = in_progress_carts[session_id]
+
+    items = []
+
+    for item, details in current_cart.items():
+        item_details = f"{item}|{details['brand']}|{details['price']}|{details['quantity']}"
+        items.append(item_details)
+
+    result = ", ".join(items)
+    print(result)
+
+    new_order = db_models.Order(items=items, total_price=total_price)
+    db_session = get_db_session(engine=db_engine)
+    db_session.add(new_order)
+    db_session.commit()
+    print(new_order.id)
+    db_session.expunge(new_order)
+    db_session.close()
+    return new_order.id, total_price
