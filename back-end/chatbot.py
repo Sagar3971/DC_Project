@@ -212,6 +212,7 @@ def remove_order(order_parameters: dict, session_id: str):
 
     return response_text
 
+
 def complete_order(session_id: str):
     if session_id in in_progress_carts:
         order_id, total_price = save_order(session_id=session_id)

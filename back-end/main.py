@@ -1,11 +1,20 @@
-from fastapi import FastAPI, Request, Depends, status
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel
-import db_models
-from db_connect import db_engine, session_local
-from sqlalchemy.orm import Session
-from chatbot import get_session_id_from_context, process_intent
+import os
+import subprocess
 from typing import Annotated
+
+from fastapi import FastAPI, status, Depends, Form, UploadFile, File
+from fastapi import Request
+from fastapi.responses import JSONResponse, FileResponse
+from google.cloud import dialogflow
+from google.cloud import speech
+from google.cloud import texttospeech
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
+
+import db_models
+import google_cloud_service
+from chatbot import get_session_id_from_context, process_intent
+from db_connect import db_engine, session_local
 
 app = FastAPI()
 db_models.declarative_base.metadata.create_all(bind=db_engine)

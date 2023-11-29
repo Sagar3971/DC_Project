@@ -1,18 +1,18 @@
 from google.cloud import speech
 from google.cloud import texttospeech
 import json
-import os
+from google.cloud import dialogflow
 
 # Connection with Google cloud
 # Instantiates a clients
 
 # Speech to text client
-#client = speech.SpeechClient.from_service_account_file('google-api-key.json')
+# client = speech.SpeechClient.from_service_account_file('google-api-key.json')
 
 # Text to speech client
 # Reference: https://cloud.google.com/docs/authentication/provide-credentials-adc#local-dev
-#os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'google-api-key.json'
-#client2 = texttospeech.TextToSpeechClient()
+# os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'google-api-key.json'
+# client2 = texttospeech.TextToSpeechClient()
 
 
 # ##################################################################################
@@ -20,6 +20,8 @@ import os
 """
 Reference: https://cloud.google.com/speech-to-text/docs/sync-recognize#speech-sync-recognize-python
 """
+
+
 def speech_to_text(input_audio, client, sample_rate_hertz):
     with open(input_audio, 'rb') as f:
         mp3_data = f.read()
@@ -48,6 +50,8 @@ def speech_to_text(input_audio, client, sample_rate_hertz):
 """
 Reference: https://cloud.google.com/text-to-speech/docs/libraries#client-libraries-install-python
 """
+
+
 def text_to_speech(query_reply, client):
     print("T2S START with: " + query_reply)
     synthesis_input = texttospeech.SynthesisInput(text=query_reply)
@@ -69,3 +73,25 @@ def text_to_speech(query_reply, client):
     print("T2S DONE...")
     return response.audio_content
 
+
+################################################################################
+
+# Google dailogflow part
+def query_dialogeflow(project_id, session_id, text, language_code, client):
+    session = client.session_path(project_id, session_id)
+    print("Session: " + session_id)
+    text_input = dialogflow.TextInput(text=text, language_code=language_code)
+    print("TEXT INPUT: ")
+    print(text_input)
+    query_input = dialogflow.QueryInput(text=text_input)
+    print("QUERY INPUT: ")
+    print(query_input)
+    df_response = client.detect_intent(
+        request={"session": session, "query_input": query_input}
+    )
+    print("DF RESPONSE: ")
+    print(df_response)
+    query_reply = format(df_response.query_result.fulfillment_text)
+    print("DF DONE with output: " + query_reply)
+
+    return query_reply
