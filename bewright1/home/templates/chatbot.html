@@ -2,6 +2,7 @@
 <html>
 
 <head>
+<!--    <meta name="csrf-token" content="{% csrf_token %}">-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/chat.css'%}">
     <!-- basic -->
 <meta charset="utf-8">
@@ -74,39 +75,235 @@
 <!--    <div class="chat-header">-->
 <!--        Shopper-->
 <!--    </div>-->
+<style>
+       /* Hide the audio controls */
+       audio {
+           display: none;
+       }
+</style>
 <div id="chat-container">
     <div id="chat-box"></div>
+    <div id="transcriptionResult"></div>
     <input type="text" id="user-input" placeholder="Type your message...">
     <img src="{% static 'images/mic.png'%}">
-    <button onclick="sendMessage()">Send</button>
+<!--    <button id="startRecordings">Record</button>-->
+    <button id="startRecording" disabled>Start Recording (Press Space)</button>
+<!--    <button onclick="sendMessage()">Send</button>-->
 </div>
+ <audio id="voiceMessage" autoplay>
+        <source src="{% static 'audio/voice_message.mp3' %}" type="audio/mpeg">
+    </audio>
 <!--<script src="{% static 'js/chat.js'%}"></script>-->
-
-
 <script>
-        function sendMessage() {
-            var userInput = document.getElementById('user-input').value;
-            appendMessage('You: ' + userInput);
+        document.addEventListener('DOMContentLoaded', function () {
+            var startRecordingButton = document.getElementById('startRecording');
+            var transcriptionResult = document.getElementById('transcriptionResult');
+            var isRecording = false;
+            var audioChunks = [];
+            var mediaRecorder;
 
-            // Make an AJAX request to get the bot response
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/get_bot_response/?user_input=' + userInput, true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    var botResponse = JSON.parse(xhr.responseText).bot_response;
-                    appendMessage('Shopper: ' + botResponse);
+            function startRecording() {
+                startRecordingButton.textContent = 'Recording...';
+                startRecordingButton.disabled = true;
+                isRecording = true;
+
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(function (stream) {
+                        mediaRecorder = new MediaRecorder(stream);
+
+                        mediaRecorder.ondataavailable = function (event) {
+                            if (event.data.size > 0) {
+                                audioChunks.push(event.data);
+                            }
+                        };
+
+                        mediaRecorder.onstop = function () {
+                            var audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                            var formData = new FormData();
+                            formData.append('audio', audioBlob);
+
+                            fetch('/transcribe_microphone/', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                transcriptionResult.textContent = data.transcription || 'No transcription available';
+                                resetRecording();
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                resetRecording();
+                            });
+                        };
+
+                        mediaRecorder.start();
+                    })
+                    .catch(function (error) {
+                        console.error('Error:', error);
+                        resetRecording();
+                    });
+            }
+
+            function stopRecording() {
+                if (isRecording) {
+                    mediaRecorder.stop();
+                    isRecording = false;
                 }
-            };
-            xhr.send();
-        }
+            }
 
-        function appendMessage(message) {
-            var chatBox = document.getElementById('chat-box');
-            var newMessage = document.createElement('div');
-            newMessage.innerHTML = message;
-            chatBox.appendChild(newMessage);
-            document.getElementById('user-input').value = '';
-        }
+            function resetRecording() {
+                startRecordingButton.textContent = 'Start Recording (Press Space)';
+                startRecordingButton.disabled = false;
+                audioChunks = [];
+            }
+
+            document.addEventListener('keydown', function (event) {
+                if (event.code === 'Space' && !isRecording) {
+                    startRecording();
+                }
+            });
+
+            document.addEventListener('keyup', function (event) {
+                if (event.code === 'Space' && isRecording) {
+                    stopRecording();
+                }
+            });
+        });
+    </script>
+
+<!--<script>-->
+<!--          function getCookie(name) {-->
+<!--            var value = "; " + document.cookie;-->
+<!--            var parts = value.split("; " + name + "=");-->
+<!--            if (parts.length == 2) return parts.pop().split(";").shift();-->
+<!--        }-->
+
+<!--        document.addEventListener('DOMContentLoaded', function () {-->
+<!--            const startRecordingButton = document.getElementById('startRecording');-->
+<!--            let mediaRecorder;-->
+<!--            let audioChunks = [];-->
+<!--            let isRecording = false;-->
+
+<!--            // Event listeners for keydown and keyup events-->
+<!--            document.addEventListener('keydown', onKeyDown);-->
+<!--            document.addEventListener('keyup', onKeyUp);-->
+
+<!--            function onKeyDown(event) {-->
+<!--                if (event.code === 'Space') {-->
+<!--                    if (!isRecording) {-->
+<!--                        startRecording();-->
+<!--                    }-->
+<!--                }-->
+<!--            }-->
+
+<!--            function onKeyUp(event) {-->
+<!--                if (event.code === 'Space') {-->
+<!--                    stopRecording();-->
+<!--                }-->
+<!--            }-->
+
+<!--            function startRecording() {-->
+<!--                navigator.mediaDevices.getUserMedia({ audio: true })-->
+<!--                    .then(function (stream) {-->
+<!--                        mediaRecorder = new MediaRecorder(stream);-->
+
+<!--                        mediaRecorder.ondataavailable = function (event) {-->
+<!--                            if (event.data.size > 0) {-->
+<!--                                audioChunks.push(event.data);-->
+<!--                            }-->
+<!--                        };-->
+
+<!--                        mediaRecorder.onstop = function () {-->
+<!--                            if (isRecording) {-->
+<!--                                startRecording();-->
+<!--                            } else {-->
+<!--                                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });-->
+<!--                                // Send the continuous audio data to the server (you need to implement this part)-->
+<!--                                sendContinuousAudioToServer(audioBlob);-->
+<!--                                audioChunks = [];  // Clear audio chunks for the next recording-->
+<!--                            }-->
+<!--                        };-->
+
+<!--                        mediaRecorder.start();-->
+<!--                        isRecording = true;-->
+<!--                        startRecordingButton.textContent = 'Recording...';-->
+<!--                    })-->
+<!--                    .catch(function (error) {-->
+<!--                        console.error('Error accessing microphone:', error);-->
+<!--                    });-->
+<!--            }-->
+
+<!--            function stopRecording() {-->
+<!--                if (mediaRecorder && mediaRecorder.state === 'recording') {-->
+<!--                    mediaRecorder.stop();-->
+<!--                    isRecording = false;-->
+<!--                    startRecordingButton.textContent = 'Press and Hold Space to Record';-->
+<!--                }-->
+<!--            }-->
+
+<!--            function sendContinuousAudioToServer(audioBlob) {-->
+<!--                const formData = new FormData();-->
+<!--                formData.append('audio', audioBlob);-->
+
+<!--                // Include CSRF token in the headers-->
+<!--                const csrftoken = getCookie('csrftoken');-->
+<!--                const headers = new Headers({-->
+<!--                    'X-CSRFToken': csrftoken-->
+<!--                });-->
+
+<!--                fetch('/user_audio/', {-->
+<!--                    method: 'POST',-->
+<!--                    body: formData,-->
+<!--                    headers: headers,-->
+<!--                    credentials: 'include'  // Include credentials for cross-origin requests-->
+<!--                })-->
+<!--                .then(response => response.json())-->
+<!--                .then(data => {-->
+<!--                    console.log('Server response:', data);-->
+<!--                })-->
+<!--                .catch(error => {-->
+<!--                    console.error('Error sending continuous audio to server:', error);-->
+<!--                });-->
+<!--            }-->
+<!--        });-->
+<!--    </script>-->
+<!--<script>-->
+<!--        function sendMessage() {-->
+<!--            var userInput = document.getElementById('user-input').value;-->
+<!--            appendMessage('You: ' + userInput);-->
+
+<!--            // Make an AJAX request to get the bot response-->
+<!--            var xhr = new XMLHttpRequest();-->
+<!--            xhr.open('GET', '/get_bot_response/?user_input=' + userInput, true);-->
+<!--            xhr.onreadystatechange = function () {-->
+<!--                if (xhr.readyState == 4 && xhr.status == 200) {-->
+<!--                    var botResponse = JSON.parse(xhr.responseText).bot_response;-->
+<!--                    appendMessage('Shopper: ' + botResponse);-->
+<!--                }-->
+<!--            };-->
+<!--            xhr.send();-->
+<!--        }-->
+
+<!--        function appendMessage(message) {-->
+<!--            var chatBox = document.getElementById('chat-box');-->
+<!--            var newMessage = document.createElement('div');-->
+<!--            newMessage.innerHTML = message;-->
+<!--            chatBox.appendChild(newMessage);-->
+<!--            document.getElementById('user-input').value = '';-->
+<!--        }-->
+<!--</script>-->
+<script>
+    // Add event listener to play the audio when the page is loaded
+    document.addEventListener('DOMContentLoaded', function () {
+        playVoiceMessage();
+    });
+
+    // Function to play the audio
+    function playVoiceMessage() {
+        const voiceMessage = document.getElementById('voiceMessage');
+        voiceMessage.play();
+    }
 </script>
 </body>
 
