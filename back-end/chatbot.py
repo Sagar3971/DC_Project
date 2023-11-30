@@ -119,7 +119,7 @@ def get_available_brands(order_parameters: dict, session_id: str):
             unbranded_items.append(key)
 
     if len(unbranded_items) > 0:
-        response_text += f"You need to specify brands for {",".join(unbranded_items)}"
+        response_text += f"You need to specify brands for {','.join(unbranded_items)}"
     else:
         response_text += "Do you need anything else?"
     return response_text

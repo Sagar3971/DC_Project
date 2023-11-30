@@ -16,5 +16,5 @@ class Order(declarative_base):
     items = Column(JSON, nullable=False)
     total_price = Column(Double, nullable=False)
     timestamp = Column('timestamp', TIMESTAMP(timezone=False), nullable=False, default=datetime.now())
-    status = Column(Enum("ordered", "shipped", "delivered", "cancelled","Delivered","On the way", name="status_enum"), default="ordered")
+    status = Column(Enum("ordered", "shipped", "delivered", "cancelled","On the way", name="status_enum"), default="ordered")
 
