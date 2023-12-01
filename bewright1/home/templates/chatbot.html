@@ -33,7 +33,90 @@
 <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css'%}">
 <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css'%}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
-<!--  <link rel="stylesheet" type="text/css" href="{% static 'css/chat.css'%}">-->
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/chat.css'%}">-->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        #chatbox {
+            max-width: 400px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        #header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        #messages {
+            padding: 10px;
+            height: 300px;
+            overflow-y: scroll;
+        }
+
+        .message-container {
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .user-message {
+            background-color: #ffffff;
+            padding: 8px;
+            border-radius: 8px;
+            float: right;
+            clear: both;
+        }
+
+        .bot-message {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px;
+            border-radius: 8px;
+            float: left;
+            clear: both;
+        }
+
+        #input-container {
+            padding: 10px;
+            background-color: #eee;
+            display: flex;
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        #send-button {
+            margin-left: 10px;
+            padding: 8px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #startRecording {
+            margin-left: 10px;
+            padding: 8px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
@@ -81,13 +164,33 @@
            display: none;
        }
 </style>
+
+    <div id="chatbox">
+        <div id="header">Shopper</div>
+        <div id="messages">
+            <!-- Chat messages will appear here -->
+            <div class="message-container">
+                <div class="message user-message">Welcome! to Shopper.</div>
+            </div>
+            <div class="message-container">
+                <div class="message bot-message">Hold space bar to record your voice message.</div>
+            </div>
+            <!-- Additional messages go here -->
+            <div id="transcriptionResult"></div>
+            <div id="transcriptionResult1"></div>
+
+        </div>
+        <div id="input-container">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button id="startRecording" disabled>Start Recording (Press Space)</button>
+<!--            <button id="send-button" onclick="sendMessage()">Send</button>-->
+
+        </div>
+    </div>
 <div id="chat-container">
     <div id="chat-box"></div>
-    <div id="transcriptionResult"></div>
-    <input type="text" id="user-input" placeholder="Type your message...">
-    <img src="{% static 'images/mic.png'%}">
 <!--    <button id="startRecordings">Record</button>-->
-    <button id="startRecording" disabled>Start Recording (Press Space)</button>
+
 <!--    <button onclick="sendMessage()">Send</button>-->
 </div>
  <audio id="voiceMessage" autoplay>
@@ -98,6 +201,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             var startRecordingButton = document.getElementById('startRecording');
             var transcriptionResult = document.getElementById('transcriptionResult');
+            var transcriptionResult1 = document.getElementById('transcriptionResult1');
             var isRecording = false;
             var audioChunks = [];
             var mediaRecorder;
@@ -129,6 +233,7 @@
                             .then(response => response.json())
                             .then(data => {
                                 transcriptionResult.textContent = data.transcription || 'No transcription available';
+                                transcriptionResult1.textContent = data.bot_reply || 'No transcription available';
                                 resetRecording();
                             })
                             .catch(error => {
@@ -172,127 +277,38 @@
         });
     </script>
 
-<!--<script>-->
-<!--          function getCookie(name) {-->
-<!--            var value = "; " + document.cookie;-->
-<!--            var parts = value.split("; " + name + "=");-->
-<!--            if (parts.length == 2) return parts.pop().split(";").shift();-->
-<!--        }-->
+    <script>
+        function sendMessage() {
+            var message = document.getElementById('transcriptionResult').value;
+            var messagesContainer = document.getElementById('messages');
 
-<!--        document.addEventListener('DOMContentLoaded', function () {-->
-<!--            const startRecordingButton = document.getElementById('startRecording');-->
-<!--            let mediaRecorder;-->
-<!--            let audioChunks = [];-->
-<!--            let isRecording = false;-->
+            // Append user message
+            var userMessageContainer = document.createElement('div');
+            userMessageContainer.className = 'message-container';
+            var userMessage = document.createElement('div');
+            userMessage.className = 'message user-message';
+            userMessage.textContent = message;
+            userMessageContainer.appendChild(userMessage);
+            messagesContainer.appendChild(userMessageContainer);
 
-<!--            // Event listeners for keydown and keyup events-->
-<!--            document.addEventListener('keydown', onKeyDown);-->
-<!--            document.addEventListener('keyup', onKeyUp);-->
+            // In a real application, you'd process the message and generate a bot response here
 
-<!--            function onKeyDown(event) {-->
-<!--                if (event.code === 'Space') {-->
-<!--                    if (!isRecording) {-->
-<!--                        startRecording();-->
-<!--                    }-->
-<!--                }-->
-<!--            }-->
+            // Append bot message
+            var botMessageContainer = document.createElement('div');
+            botMessageContainer.className = 'message-container';
+            var botMessage = document.createElement('div');
+            botMessage.className = 'message bot-message';
+            botMessage.textContent = 'I received your message!';
+            botMessageContainer.appendChild(botMessage);
+            messagesContainer.appendChild(botMessageContainer);
 
-<!--            function onKeyUp(event) {-->
-<!--                if (event.code === 'Space') {-->
-<!--                    stopRecording();-->
-<!--                }-->
-<!--            }-->
+            // Clear the input
+            document.getElementById('user-input').value = '';
 
-<!--            function startRecording() {-->
-<!--                navigator.mediaDevices.getUserMedia({ audio: true })-->
-<!--                    .then(function (stream) {-->
-<!--                        mediaRecorder = new MediaRecorder(stream);-->
-
-<!--                        mediaRecorder.ondataavailable = function (event) {-->
-<!--                            if (event.data.size > 0) {-->
-<!--                                audioChunks.push(event.data);-->
-<!--                            }-->
-<!--                        };-->
-
-<!--                        mediaRecorder.onstop = function () {-->
-<!--                            if (isRecording) {-->
-<!--                                startRecording();-->
-<!--                            } else {-->
-<!--                                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });-->
-<!--                                // Send the continuous audio data to the server (you need to implement this part)-->
-<!--                                sendContinuousAudioToServer(audioBlob);-->
-<!--                                audioChunks = [];  // Clear audio chunks for the next recording-->
-<!--                            }-->
-<!--                        };-->
-
-<!--                        mediaRecorder.start();-->
-<!--                        isRecording = true;-->
-<!--                        startRecordingButton.textContent = 'Recording...';-->
-<!--                    })-->
-<!--                    .catch(function (error) {-->
-<!--                        console.error('Error accessing microphone:', error);-->
-<!--                    });-->
-<!--            }-->
-
-<!--            function stopRecording() {-->
-<!--                if (mediaRecorder && mediaRecorder.state === 'recording') {-->
-<!--                    mediaRecorder.stop();-->
-<!--                    isRecording = false;-->
-<!--                    startRecordingButton.textContent = 'Press and Hold Space to Record';-->
-<!--                }-->
-<!--            }-->
-
-<!--            function sendContinuousAudioToServer(audioBlob) {-->
-<!--                const formData = new FormData();-->
-<!--                formData.append('audio', audioBlob);-->
-
-<!--                // Include CSRF token in the headers-->
-<!--                const csrftoken = getCookie('csrftoken');-->
-<!--                const headers = new Headers({-->
-<!--                    'X-CSRFToken': csrftoken-->
-<!--                });-->
-
-<!--                fetch('/user_audio/', {-->
-<!--                    method: 'POST',-->
-<!--                    body: formData,-->
-<!--                    headers: headers,-->
-<!--                    credentials: 'include'  // Include credentials for cross-origin requests-->
-<!--                })-->
-<!--                .then(response => response.json())-->
-<!--                .then(data => {-->
-<!--                    console.log('Server response:', data);-->
-<!--                })-->
-<!--                .catch(error => {-->
-<!--                    console.error('Error sending continuous audio to server:', error);-->
-<!--                });-->
-<!--            }-->
-<!--        });-->
-<!--    </script>-->
-<!--<script>-->
-<!--        function sendMessage() {-->
-<!--            var userInput = document.getElementById('user-input').value;-->
-<!--            appendMessage('You: ' + userInput);-->
-
-<!--            // Make an AJAX request to get the bot response-->
-<!--            var xhr = new XMLHttpRequest();-->
-<!--            xhr.open('GET', '/get_bot_response/?user_input=' + userInput, true);-->
-<!--            xhr.onreadystatechange = function () {-->
-<!--                if (xhr.readyState == 4 && xhr.status == 200) {-->
-<!--                    var botResponse = JSON.parse(xhr.responseText).bot_response;-->
-<!--                    appendMessage('Shopper: ' + botResponse);-->
-<!--                }-->
-<!--            };-->
-<!--            xhr.send();-->
-<!--        }-->
-
-<!--        function appendMessage(message) {-->
-<!--            var chatBox = document.getElementById('chat-box');-->
-<!--            var newMessage = document.createElement('div');-->
-<!--            newMessage.innerHTML = message;-->
-<!--            chatBox.appendChild(newMessage);-->
-<!--            document.getElementById('user-input').value = '';-->
-<!--        }-->
-<!--</script>-->
+            // Scroll to the bottom to show the latest messages
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+    </script>
 <script>
     // Add event listener to play the audio when the page is loaded
     document.addEventListener('DOMContentLoaded', function () {

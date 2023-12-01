@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "shopper-chatbot-for-dc-vbey",
+  "private_key_id": "efcbc3c978bb65c1be55c20f59e689ac36a4df02",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCyR8GSInV8cb7a\nBIX4Bvgc4dIPFW3HnNCCwY0+aP+oqJ3yafSHBpdndSve2dmK7cVpZBVhhahyZCee\nE19IaZpIsta7iqLV8A8URPNhrGRdDq7XUvMRRqRkrdDnx/64iuKt9B0QxxG/byDJ\n8MpegjDpaaT5h5jFkoEQeDi/cGqVMxgVgLzcDPaKsFFTjO7AZP/EQMlqpyadwD1t\nm6zonEUyAzQPR6Q2VTmJViN/p+E6dzAwSFkNnkuSYt9aMzAYm5wSKXoZYzfVCt41\nXBNA7aVE2KPLMzN+14eYic+u5deo7V/ftp89iVjEsSrSf8Ibg/InWm/s37DRS8XM\nD3cifBszAgMBAAECggEAJc0hNiMoViKoHQIohda0dStMpvYcON7/NzpjAICy9MgL\n9YKR3q9/Gui1TKNUhSi1WwtlnTAB739dBx+EbI43sIJ7FXjn3gTwrZORJ3yuKy0Z\n1X45G8imwtI4IW0+jVKljczc/Nm44aZmhWsQ/ckNJfDIkkA2HG5b/2n+XlkvwEKh\nwH6gUJ9LDf9/pLkr1LKdDbeQis6MdoLS3UuDAcGJLpFAqcfBTIxBybRChpU3Gkfv\n3hkW7UJoZlqMDuzJ0C42NPsaZMdRRTHBpMUcVenjagnirS2/53LMEGIvTUBWavHl\nerfgWnI3cBw8mZErjY0QUaRkcyQ4Gn+Jt4/EBaYigQKBgQD0zty/eo6mFKYjSNTT\n/nLlbC+Bnbbc8oJTeA+gFdum3aYGne8hon2yN8uCpiAcKkYI0jboYcgy6yraPbay\nmR8/CRIXixOFRjMAkTLGEbD43i3LIKDAQwd1gW9bxh15QmxeyQb4SA3z13H3WhUn\nVUJk/ubX+FR1DMCkOr2h3IRF2wKBgQC6bkdrfOnVmHrScNa/3PHsWu4Wrduq/oZm\nWJ3gqNAKEBT5qAQm09mfYQ1sn+jJ76N7Q1/mwOMb4ayzb3Io9RhSXYQp0QsN2c3d\nhWG6VnkTM0gDt/nRUGVzJ8oi3EMRs7m86e5hNIN3KLiOTBiREiVLJ8Z04yQB3u5j\nUOMVlC/7iQKBgBAad2zlC/Mi0pbpmI5lY3tx9WIKVNgN38LL2ANIzM0aMWyoAO3u\neWQ6xVlPwjb4FOlJorEAlaG71HLMsnLnHaYQ267OyDbxGjPEWVmsGj8UpmCBQfHD\ntv7kx8V6r7+lPemyQZIdc0WB+44wz8lpk1d/aQH15OBaOWXUM1stXUoXAoGANbOa\ngw3iVZKsnn2+flnongq7VnESO7lBga25HIPEGYH0aM3LFFwl7dEJCuctKS4MS29m\n6pNZWCizlKRfoAipzt/9OAZtRrocoNjRA9nw2mUFM30FSxP7hSZLBauo7ip1MEO6\nVOnJjMOAFg05bmBpubJlajobnyZWSOl94DNldvECgYAoS/HJrFLiBEXWv3J6y4ig\nLegUM/Z0dUa5bwn718qmdeSaG7Z8E8C/V1wN8vz3jTDmZ2YqMiVGojE8zn8lfMXt\nXyL/mBB642Z12ey5KfMZI9ezr8uErnjE745X548NXzHjRFF0z9IMPknKP9zoBVLQ\nR0ErDxzGaxgH5PYgty/GqA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "service-for-chatbot@shopper-chatbot-for-dc-vbey.iam.gserviceaccount.com",
+  "client_id": "111417602234107489899",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/service-for-chatbot%40shopper-chatbot-for-dc-vbey.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
