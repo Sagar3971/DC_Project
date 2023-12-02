@@ -1,9 +1,10 @@
 # DC_Project
-bewright1 folder is main project folder
+bewright1 folder is main project folder <br>
 Install these package to run the program
-1. pip install google-cloud-texttospeech
-2. pip install google-cloud-speech
-3. pip install sounddevice
-4. pip install numpy
-To execute the program on your local PC, run the commandline code given below:
->>py manage.py runserver
+- pip install Django
+- pip install google-cloud-texttospeech
+- pip install google-cloud-speech
+- pip install sounddevice
+- pip install numpy
+- *To execute the program on your local PC, run the commandline code given below:*
+- **py manage.py runserver**
