@@ -39,7 +39,6 @@ def transcribe_microphone(request):
     if request.method == 'POST':
         try:
             audio_data = record_audio(duration=5)
-
             transcription = transcribe_audio(audio_data)
             os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'static/secretkey/shopper.json'
             session_client = dialogflow.SessionsClient()
@@ -56,8 +55,8 @@ def transcribe_microphone(request):
             bot_reply = format(response.query_result.fulfillment_text)
             os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "static/secretkey/text_to_speech.json"
             client = texttospeech.TextToSpeechClient()
-            default_text = bot_reply
-            synthesis_input = texttospeech.SynthesisInput(text=default_text)
+            text_output = bot_reply
+            synthesis_input = texttospeech.SynthesisInput(text=text_output)
             voice = texttospeech.VoiceSelectionParams(
                 language_code="en-US",
                 name="en-US-Wavenet-D",

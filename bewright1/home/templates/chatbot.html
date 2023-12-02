@@ -33,7 +33,16 @@
 <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css'%}">
 <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css'%}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/chat.css'%}">-->
+<link rel="stylesheet" type="text/css" href="{% static 'css/chatbot.css'%}">
+    <style>
+       /* Hide the audio controls */
+       audio {
+           display: none;
+       }
+               #audioPlayer {
+            display: none;  /* Hide the audio player */
+        }
+</style>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -155,30 +164,15 @@
       </nav>
     </div>
   </div>
-<!--    <div class="chat-header">-->
-<!--        Shopper-->
-<!--    </div>-->
-<style>
-       /* Hide the audio controls */
-       audio {
-           display: none;
-       }
-               #audioPlayer {
-            display: none;  /* Hide the audio player */
-        }
-</style>
-
     <div id="chatbox">
         <div id="header">Shopper</div>
         <div id="messages">
-            <!-- Chat messages will appear here -->
             <div class="message-container">
                 <div class="message user-message">Welcome! to Shopper.</div>
             </div>
             <div class="message-container">
                 <div class="message bot-message">Hold space bar to record your voice message.</div>
             </div>
-            <!-- Additional messages go here -->
             <div id="transcriptionResult"></div>
             <div id="transcriptionResult1"></div>
             <audio id="audioPlayer" controls autoplay>
@@ -189,20 +183,14 @@
         <div id="input-container">
             <input type="text" id="user-input" placeholder="Type your message...">
             <button id="startRecording" disabled>Start Recording (Press Space)</button>
-<!--            <button id="send-button" onclick="sendMessage()">Send</button>-->
-
         </div>
     </div>
 <div id="chat-container">
     <div id="chat-box"></div>
-<!--    <button id="startRecordings">Record</button>-->
-
-<!--    <button onclick="sendMessage()">Send</button>-->
 </div>
  <audio id="voiceMessage" autoplay>
         <source src="{% static 'audio/voice_message.mp3' %}" type="audio/mpeg">
     </audio>
-<!--<script src="{% static 'js/chat.js'%}"></script>-->
 <script>
         document.addEventListener('DOMContentLoaded', function () {
             var startRecordingButton = document.getElementById('startRecording');
