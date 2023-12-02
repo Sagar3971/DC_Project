@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "shopper-okql",
+  "private_key_id": "81d9f5af9aabb9e11af19af9e57d92a84825e9dc",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCwuPWt6nv6oCuP\nbHGNFwkhBSbmaYxo6fJMl9w2doTq+qNWWA5GE6uln4ld4Lev88iKmVbRQ8bDAEed\nN04OBi5fB0X7lb89kGHirAkQ/v89MODYgQiyZgcqiBzZudcV/KZAeSQeq+xUWHF3\nYkjSJa3xIaUpWdWC3wPoqTO9m8khrIbXYHewdjnNl6BAi1GNfo3WiIIq6rJP9lF0\n7vrRQd+psDUFgD3JXS31/dm7e9d/ZmCneI68xu2SymzEHfXh16BffmJ8jb7qWt0M\nlbgtBQZ2wE6KekWAlOcsuElNdZb4SivhHzw5Po0xyiM3va/7Ww6+wbHZUx+3FG3v\n4lObqXQBAgMBAAECggEAAX9yU+Dg/9F26A1zR47ThMNY4mbgbgDWXR9EAlVKJG2X\nGAGpXo8+7xmXZ/+CMA5f76qLvIyjewpx+PFvprVXRBZ9OaQB78otFbc3gRSXtkmX\nXMdocu5j4viuDat+SOs0H6eVMoI6l7cLkGdxooAXsaubTTrD6Trlmx2gxNuMwoWC\nr1DdoVPYEHR8XzQtlvEQcNNghaRF/NtXKydnweZfM9MxZnxoXc/qCQTlcVhwERpY\nFhCmF/7Y2pkQ8k8QIu9FTUbWOq0HdFk72HI91yXSP1nYOZN/H2dBzoKkaelDdGsS\ngKQaS0J/oARkyfzkpsnRsS906PbnJvrg1fiAOkCMgQKBgQDggizA5jjd40yjXXnh\nllqb5L4zhTJ/i17LHgZud6iDAtGKgbfkaD9azKFa3FY1XdlsAGwVaXhenLGA0h0C\n4fo7OIsL7zptghZe7+EjoB/xgBSJgwNqIhTWvK4cnEH1AKoFiUO/6lVlxO1RpdNn\nPhkEiiucwYWGsbKCorXkgempQQKBgQDJgtkmEtMTvMI7WTrd9TJ861mblwXPXHiE\n+U2MgwSY3QNJuKBkr0NtbQ39+bAUUnkQwAAWOqJgfwcOih2p6LwApVLwAI3U9Mo6\nmQsI09orifarak5AcnH36sGM3DYoQatkKQBmUmBivao5+AeSWhj88FoRRP9GYJPv\nxzUDRQBawQKBgHMk0GcurEPA6/FtY7E7N8V0j8hErB2WEUwDXjER1a87ptRuqy3N\n+ZBMGwVKtDwyoewuW0CwEzgTDUaQfKiZ1YjB+y5nx4OakHaoeMOYwElP8ziDpSCt\n0hpAMtwhmAJcENc+Cy1Gtf23/i896SquQo59ftiquBzYzkEJylgj+P8BAoGAMLnS\nFjHBFmmzMbSe1mLe5XPnRAcdoYmDnuvFg69+ohP3IpFhP1dd34zaMEp6+D8FBTbY\nDof5EYpFw49EIvyi0Skox93qbc8PQ2IUV/saKyL+IW7gIxdJVaBPUudAtTVD40FC\n1nse0WF5UvEVq57bofXgYYKkk3jw7K7ns7Wwo0ECgYEAmnWZ8BYTdyU1UMlvPE1O\nQgZEcgYFSYTNkldiVV2MNfwRva+I7fEgqeqbAP17JvnKQ8AhkXW9e0mNDDoAHtz/\nxYnT7nMvrUxRucv3xpJd2Q3hikASJT3WIUQTblgDcWVcVNlSvtx4Q00QXVVMe8LU\nMzwmeqDviUN+ZAHCrbGKUI8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "sagarkhanal@shopper-okql.iam.gserviceaccount.com",
+  "client_id": "102014612244222672805",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sagarkhanal%40shopper-okql.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

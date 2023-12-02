@@ -163,6 +163,9 @@
        audio {
            display: none;
        }
+               #audioPlayer {
+            display: none;  /* Hide the audio player */
+        }
 </style>
 
     <div id="chatbox">
@@ -178,6 +181,9 @@
             <!-- Additional messages go here -->
             <div id="transcriptionResult"></div>
             <div id="transcriptionResult1"></div>
+            <audio id="audioPlayer" controls autoplay>
+                <source id="audioSource" type="audio/wav">
+            </audio>
 
         </div>
         <div id="input-container">
@@ -234,6 +240,11 @@
                             .then(data => {
                                 transcriptionResult.textContent = data.transcription || 'No transcription available';
                                 transcriptionResult1.textContent = data.bot_reply || 'No transcription available';
+                                const audioPlayer = document.getElementById('audioPlayer');
+                                const audioSource = document.getElementById('audioSource');
+                                audioSource.src = 'data:audio/wav;base64,' + data.audio_base64;
+                                audioPlayer.load();
+                                audioPlayer.play();
                                 resetRecording();
                             })
                             .catch(error => {
@@ -277,38 +288,38 @@
         });
     </script>
 
-    <script>
-        function sendMessage() {
-            var message = document.getElementById('transcriptionResult').value;
-            var messagesContainer = document.getElementById('messages');
+<!--    <script>-->
+<!--        function sendMessage() {-->
+<!--            var message = document.getElementById('transcriptionResult').value;-->
+<!--            var messagesContainer = document.getElementById('messages');-->
 
-            // Append user message
-            var userMessageContainer = document.createElement('div');
-            userMessageContainer.className = 'message-container';
-            var userMessage = document.createElement('div');
-            userMessage.className = 'message user-message';
-            userMessage.textContent = message;
-            userMessageContainer.appendChild(userMessage);
-            messagesContainer.appendChild(userMessageContainer);
+<!--            // Append user message-->
+<!--            var userMessageContainer = document.createElement('div');-->
+<!--            userMessageContainer.className = 'message-container';-->
+<!--            var userMessage = document.createElement('div');-->
+<!--            userMessage.className = 'message user-message';-->
+<!--            userMessage.textContent = message;-->
+<!--            userMessageContainer.appendChild(userMessage);-->
+<!--            messagesContainer.appendChild(userMessageContainer);-->
 
-            // In a real application, you'd process the message and generate a bot response here
+<!--            // In a real application, you'd process the message and generate a bot response here-->
 
-            // Append bot message
-            var botMessageContainer = document.createElement('div');
-            botMessageContainer.className = 'message-container';
-            var botMessage = document.createElement('div');
-            botMessage.className = 'message bot-message';
-            botMessage.textContent = 'I received your message!';
-            botMessageContainer.appendChild(botMessage);
-            messagesContainer.appendChild(botMessageContainer);
+<!--            // Append bot message-->
+<!--            var botMessageContainer = document.createElement('div');-->
+<!--            botMessageContainer.className = 'message-container';-->
+<!--            var botMessage = document.createElement('div');-->
+<!--            botMessage.className = 'message bot-message';-->
+<!--            botMessage.textContent = 'I received your message!';-->
+<!--            botMessageContainer.appendChild(botMessage);-->
+<!--            messagesContainer.appendChild(botMessageContainer);-->
 
-            // Clear the input
-            document.getElementById('user-input').value = '';
+<!--            // Clear the input-->
+<!--            document.getElementById('user-input').value = '';-->
 
-            // Scroll to the bottom to show the latest messages
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-    </script>
+<!--            // Scroll to the bottom to show the latest messages-->
+<!--            messagesContainer.scrollTop = messagesContainer.scrollHeight;-->
+<!--        }-->
+<!--    </script>-->
 <script>
     // Add event listener to play the audio when the page is loaded
     document.addEventListener('DOMContentLoaded', function () {

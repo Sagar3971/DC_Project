@@ -12,6 +12,7 @@ from google.cloud import speech_v1p1beta1 as speech
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from google.cloud import dialogflow
+import base64
 
 
 # Create your views here.
@@ -62,9 +63,32 @@ def transcribe_microphone(request):
             )
 
             bot_reply = format(response.query_result.fulfillment_text)
-            print(bot_reply)
 
-            return JsonResponse({'status': 'success', 'transcription': transcription,'bot_reply':bot_reply})
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "static/secretkey/text_to_speech.json"
+            client = texttospeech.TextToSpeechClient()
+            # You can use a default text or retrieve it from another source
+            default_text = bot_reply
+
+            synthesis_input = texttospeech.SynthesisInput(text=default_text)
+
+            voice = texttospeech.VoiceSelectionParams(
+                language_code="en-US",
+                name="en-US-Wavenet-D",
+                ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL,
+            )
+
+            audio_config = texttospeech.AudioConfig(
+                audio_encoding=texttospeech.AudioEncoding.LINEAR16
+            )
+
+            response = client.synthesize_speech(
+                input=synthesis_input, voice=voice, audio_config=audio_config
+            )
+
+            audio_content = response.audio_content
+            audio_base64 = base64.b64encode(audio_content).decode('utf-8')
+
+            return JsonResponse({'status': 'success', 'transcription': transcription,'bot_reply':bot_reply,'audio_base64': audio_base64})
 
         except Exception as e:
             print(f"Error: {e}")
