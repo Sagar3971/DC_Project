@@ -191,6 +191,28 @@
  <audio id="voiceMessage" autoplay>
         <source src="{% static 'audio/voice_message.mp3' %}" type="audio/mpeg">
     </audio>
+
+    <script>
+        document.getElementById('startRecording').addEventListener('click', requestMicrophoneAccess);
+
+        function requestMicrophoneAccess() {
+            // Check if the browser supports the getUserMedia API
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                // Request access to the microphone
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(function (stream) {
+                        console.log('Microphone access granted');
+                        // You can do further processing if needed, e.g., stream handling
+                    })
+                    .catch(function (error) {
+                        console.error('Error accessing the microphone:', error);
+                    });
+            } else {
+                console.error('getUserMedia is not supported in this browser');
+            }
+        }
+    </script>
+
 <script>
         document.addEventListener('DOMContentLoaded', function () {
             var startRecordingButton = document.getElementById('startRecording');
