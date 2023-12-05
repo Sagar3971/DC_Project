@@ -1,6 +1,5 @@
 from django.shortcuts import render
 import os
-from google.cloud import speech
 from google.cloud import texttospeech
 import numpy as np
 import pyaudio
