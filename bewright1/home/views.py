@@ -2,7 +2,8 @@ from django.shortcuts import render
 import os
 from google.cloud import speech
 from google.cloud import texttospeech
-import sounddevice as sd
+import numpy as np
+import pyaudio
 from google.cloud import speech_v1p1beta1 as speech
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -43,7 +44,7 @@ def transcribe_microphone(request):
             os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'static/secretkey/shopper.json'
             session_client = dialogflow.SessionsClient()
             text = transcription
-            language_code = "en-US"
+            language_code = "en-IN"
             session_id = "abcdefg123456"
             project_id = "shopper-chatbot-for-dc-vbey"
             session = session_client.session_path(project_id, session_id)
@@ -58,8 +59,8 @@ def transcribe_microphone(request):
             text_output = bot_reply
             synthesis_input = texttospeech.SynthesisInput(text=text_output)
             voice = texttospeech.VoiceSelectionParams(
-                language_code="en-US",
-                name="en-US-Wavenet-D",
+                language_code="en-IN",
+                name="en-IN-Wavenet-D",
                 ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL,
             )
             audio_config = texttospeech.AudioConfig(
@@ -78,12 +79,37 @@ def transcribe_microphone(request):
 
 
 def record_audio(duration=5, sample_rate=16000):
-    audio_data = sd.rec(int(duration * sample_rate), samplerate=sample_rate, channels=1, dtype='int16')
-    sd.wait()
-    return audio_data.flatten()
+    # audio_data = sd.rec(int(duration * sample_rate), samplerate=sample_rate, channels=1, dtype='int16')
+    # sd.wait()
+    # return audio_data.flatten()
+    p = pyaudio.PyAudio()
+
+    # Set up the audio stream
+    stream = p.open(format=pyaudio.paInt16,
+                    channels=1,
+                    rate=sample_rate,
+                    input=True,
+                    frames_per_buffer=int(duration * sample_rate))
+
+    print("Recording...")
+
+    # Read audio data from the stream
+    audio_data = stream.read(int(duration * sample_rate))
+
+    print("Finished recording.")
+
+    # Convert binary data to NumPy array
+    audio_array = np.frombuffer(audio_data, dtype=np.int16)
+
+    # Close the audio stream and PyAudio
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
+
+    return audio_array
 
 
-def transcribe_audio(audio_data, language_code="en-US"):
+def transcribe_audio(audio_data, language_code="en-IN"):
     os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'static/secretkey/key.json'
     client = speech.SpeechClient()
     audio = speech.RecognitionAudio(content=audio_data.tobytes())

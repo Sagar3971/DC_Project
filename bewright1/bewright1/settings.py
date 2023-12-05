@@ -27,7 +27,7 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "static/secretkey/key.json"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','ec2-user@ip-172-31-25-54']
 
 
 # Application definition
