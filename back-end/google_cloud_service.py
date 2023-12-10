@@ -95,3 +95,13 @@ def query_dialogeflow(project_id, session_id, text, language_code, client):
     print("DF DONE with output: " + query_reply)
 
     return query_reply
+
+
+"""
+Reference: 
+dialogeflowAPI:
+https://cloud.google.com/dialogflow/es/docs/reference/api-overview
+https://cloud.google.com/dialogflow/es/docs/reference/libraries/python
+https://github.com/GoogleCloudPlatform/python-docs-samples/tree/main/dialogflow
+
+"""

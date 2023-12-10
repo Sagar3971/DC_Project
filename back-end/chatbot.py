@@ -33,10 +33,7 @@ def process_intent(intent, response_parameters, session_id: str):
         case 'remove.from.cart':
             return remove_order(response_parameters, session_id)
         case default:
-            return ('I couldn\'t understand you. Please say "New Order" for placing a new order or "track order" to '
-                    'track an order. also, only items available to add in your orders are "Milk", "Bread", "eggs", '
-                    '"Sugar", "Salt", "Oil", "tomato Ketchup", "water" and "noodles". for example, you can say "add '
-                    'two eggs".')
+            return 'I couldn\'t understand you.'
 
 
 def get_session_id_from_context(context: str):
@@ -128,7 +125,7 @@ def get_available_brands(order_parameters: dict, session_id: str):
 def convert_cart_items_to_str(grocery_cart: dict):
     cart_items_str = ", ".join(
         [str(str(int(value['quantity'])) + " " + value['brand'] + " " + key + " " if 'brand' in value.keys() else ' ') +
-         str('for $' + str(value['price'] * int(value['quantity'])) if 'price' in value.keys() else '') +
+         str('for $' + str(round(value['price'] * int(value['quantity']),2)) if 'price' in value.keys() else '') +
          f"" for key, value in grocery_cart.items()])
     return cart_items_str
 
@@ -156,7 +153,7 @@ def get_item_choices(items):
 def get_item_prices(item_name: str, item_brand: str):
     db_session = get_db_session(engine=db_engine)
     item_price = (db_session.query(db_models.Item.price)
-                  .filter(db_models.Item.name == item_name and db_models.Item.company == item_brand).first())
+                  .filter(db_models.Item.name == item_name).filter(db_models.Item.company == item_brand).first())
     if item_price:
         result = item_price
     else:
@@ -174,7 +171,7 @@ def get_total_cart_value(session_id: str):
             item_price = 0
         total_price += item_price * current_cart[item]['quantity']
 
-    return total_price
+    return round(total_price,2)
 
 
 def get_session_cart_items(session_id):

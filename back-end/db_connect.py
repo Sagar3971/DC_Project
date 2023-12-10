@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-DB_URL = 'mysql+pymysql://root:root@localhost:3306/shopper_store'
+DB_URL = 'mysql+pymysql://***:***@database-1.cv8who2rxk2v.us-east-1.rds.amazonaws.com:3306/shopper-DB'
 
 db_engine = create_engine(DB_URL)
 
